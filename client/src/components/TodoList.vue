@@ -18,19 +18,26 @@
 import TodoItem from "@/components/TodoItem";
 import AddItem from "@/components/AddItem";
 
+import http from "../http-common"
+
 export default {
+  name: 'TodoList',
   components: {AddItem, TodoItem},
   data() {
     return {
-      listItems: [
-        {id: 1, title: "Learn JavaScript", isChecked: false},
-        {id: 2, title: "Learn Vue", isChecked: false},
-        {id: 3, title: "Learn Node.js", isChecked: false},
-      ],
+      listItems: [],
     }
   },
+  mounted() {
+    this.showTodoList()
+  },
   methods: {
-    addItem(item) {
+    async showTodoList() {
+      const todoResponse = await http.get('/todos')
+      this.listItems = todoResponse.data
+    },
+    async addItem(item) {
+      await http.post('/', item)
       this.listItems.push(item);
     }
   }

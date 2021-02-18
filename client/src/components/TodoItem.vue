@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import http from "@/http-common";
+
 export default {
   props: {
     listItems: {
@@ -22,12 +24,14 @@ export default {
     }
   },
   methods: {
-    changeChecked(id) {
+    async changeChecked(id) {
       const item = this.listItems.find(item => item.id === id)
       item.isChecked = !item.isChecked
+      await http.post('/update', item)
     },
-    removeItem(id) {
+    async removeItem(id) {
       this.listItems = this.listItems.filter(item => item.id !== id)
+      await http.delete(`/${id}`)
     }
   }
 }
